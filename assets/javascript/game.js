@@ -1,9 +1,4 @@
 
-// I tried to make this work. Deleted lines over and over because nothing worked. I'm probably going to
-// have to schedule some 1on1s and go over this assignment. I really wanted to ty and figure stuff out by myself
-// but not going to do that anymore.
-
-
 
 var wowTerms = ["Deathknight", "Warrior", "Paladin", "Monk", "Druid",
 "Demon Hunter", "Priest", "Shaman", "Hunter", "Rogue", "Mage", "Thrall",
@@ -11,21 +6,55 @@ var wowTerms = ["Deathknight", "Warrior", "Paladin", "Monk", "Druid",
  "Human", "Forsaken", "Worgen", "Troll", "Dwarf", "Draenei", "Worgen",
  "Panderia", "Gnome"];
 
-var possibleGuesses = ["q","w","e","r","t","y","u","i","o","p","a","s",
-"d","f","g", "h","j","k","l","z","x","c","v","b","n","m"];
+// var possibleGuesses = ["q","w","e","r","t","y","u","i","o","p","a","s",
+// "d","f","g", "h","j","k","l","z","x","c","v","b","n","m"];
 
 
 var winCount = 0;
 var lossCount = 0;
 var lifeCount = 12;
-var usedList = "";
-
-
+var usedList = [];
+var emptyArray = [];
+var computerWord;
 
 
 document.onkeyup = function(event) {
 	var userLetter = event.key;
-	var userGuess = userLetter.toUpperCase();
+	var userGuess = userLetter.toLowerCase();
+	var letterIsCorrect = false;
+
+	for (var i = 0; i < computerWord.length; i++) {
+
+		if (userGuess === computerWord.charAt(i).toLowerCase()) {
+			// switch underscore for correct letter
+			letterIsCorrect = true;
+			emptyArray[i] = userGuess;
+			document.getElementById("currentWord").innerHTML = emptyArray.join(" ");
+		}
+	} // for loop ends here
+
+	if(letterIsCorrect === false){
+		// this means you got it incorrect
+		usedList.push(userGuess);
+		lifeCount--;
+		document.getElementById("lives").innerHTML = lifeCount;
+		document.getElementById("alreadyGuessed").innerHTML = usedList;
+	}
+
+	//update wincounter if there are no more '_' in emptyArray
+	if (emptyArray.indexOf("_") < 0){
+		winCount++;
+		document.getElementById("wins").innerHTML = winCount;
+		resetGame();
+	}
+
+	//updates loss counter if lifeCount = 0
+	if (lifeCount === 0){
+		lossCount++;
+		document.getElementById("losses").innerHTML = lossCount;
+		resetGame();
+	}
+
 }
 
 // start game
@@ -34,37 +63,45 @@ function startGame() {
 	winCount = 0;
 	lossCount = 0;
 	lifeCount = 12;
-	var computerWord = wowTerms[Math.floor(Math.random() * wowTerms.length)];
-	var	computerChose = computerWord[Math.floor(Math.random() * computerWord.length)]
+	usedList = [];
+	computerWord = wowTerms[Math.floor(Math.random() * wowTerms.length)];
+
+	
+	for (var i = 0; i < computerWord.length; i++){
+		if (computerWord.charAt(i) === " "){
+			emptyArray.push(" ");
+		
+		}
+		else {
+			emptyArray.push("_");
+			
+		}
 	};
-	document.getElementById("currentWord").innerHTML = computerChose;
+	document.getElementById("currentWord").innerHTML = emptyArray.join(" ");
 }
 startGame();
 
-//blank spaces
-function blankSpaces() {
-	for (i < 0; i < computerChose; i++);
-		document.getElementById("#currentWord").innerHTML = "_ ";
-}
-blankSpaces();
+//reset game when user wins or loses
 
-//lsit of guessed letters
-function guessList() {
-	usedList = "";
-	for (var i = 0; i < possibleGuesses.length; ++i){
-		usedList = (usedList + possibleGuesses[i])
+function resetGame() {	
+	lifeCount = 12;
+	emptyArray = [];
+	usedList = [];
+	computerWord = wowTerms[Math.floor(Math.random() * wowTerms.length)];
+	
+	for (var i = 0; i < computerWord.length; i++){
+		if (computerWord.charAt(i) === " "){
+			emptyArray.push(" ");
+		}
+		else {
+			emptyArray.push("_");
+		}
 	};
-		document.getElementById("#alreadyGuessed") = usedList;
+	document.getElementById("currentWord").innerHTML = emptyArray.join(" ");
+	document.getElementById("lives").innerHTML = lifeCount;
+	document.getElementById("alreadyGuessed").innerHTML = usedList;
 }
-guessList();
+resetGame();
 
-//game over
-function gameOver() {
-	if (lifeCount === 0) {
-		document.getElementById("announcement").innerHTML = ("Game Over!");
-	}
 
-//new game
-function newRound() {
-	if ()
-}
+

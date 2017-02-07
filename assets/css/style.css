@@ -6,3 +6,11 @@
 h1, h2, h3, h4, h5, p {
 	text-align: center;
 }
+
+#currentWord {
+	font-size: 40px;
+}
+
+#alreadyGuessed {
+	font-size: 40px;
+}
